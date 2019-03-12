@@ -2,7 +2,7 @@
 
 namespace app\api\validate;
 
-class AddressNew
+class AddressNew extends BaseValidate
 {
 	protected $rule = [
 		'name' => 'require|isNotEmpty',
