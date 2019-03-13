@@ -1,4 +1,4 @@
-﻿<?php 
+<?php
 
 namespace app\api\controller\v1;
 
@@ -7,12 +7,16 @@ use app\api\service\Token as TokenService;
 use app\api\model\User as UserModel;
 use app\lib\exception\UserException;
 use app\lib\exception\SuccessMessage;
+use think\Controller;
 
-class Address
+class Address extends Controller
 {
+	
 	public function createOrUpdateAddress()
 	{
-		(new AddressNew())->gocheck();
+		$validate = new AddressNew();
+		$validate->gocheck();
+
 		// 根据Token来获取uid
 		// 根据uid来查找用户数据,判断用户是否存在,如果不存在抛出异常
 		// 获取用户从客户端提交过来的地址信息
@@ -24,7 +28,7 @@ class Address
 		if(!$user){
 			throw new UserException();
 		}
-		$dataArray = getData();
+		$dataArray = $validate->getDataByRule(input('post.'));
 		$userAddress = $user->address;
 
 		if(!$userAddress){
@@ -34,6 +38,6 @@ class Address
 		}
 
 		// return $user;
-		return new SuccessMessage();
+		return json(new SuccessMessage(),201);
 	}
 }

@@ -48,3 +48,6 @@ Route::post('api/:version/token/user', 'api/:version.Token/getToken');
 
 //地址
 Route::post('api/:version/address', 'api/:version.Address/createOrUpdateAddress');
+
+Route::get('api/:version/second', 'api/:version.Address/second');
+Route::get('api/:version/third', 'api/:version.Address/third');
