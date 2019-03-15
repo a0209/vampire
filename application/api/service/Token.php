@@ -5,6 +5,8 @@ namespace app\api\service;
 use think\Cache;
 use think\Request;
 use app\lib\exception\TokenException;
+use app\lib\enum\ScopeEnum;
+use app\lib\exception\ForbiddenException;
 
 class Token
 {
@@ -20,6 +22,7 @@ class Token
 		return md5($randChars.$timestamp.$salt);
 	}
 
+	// 获取缓存中指定的值
 	public static function getCurrentTokenVar($key)
 	{
 		$token = Request::instance()->header('token');
@@ -41,10 +44,45 @@ class Token
 		}
 	}
 
+	// 从缓存中获取用户id
 	public static function getCurrentUid()
 	{
 		$uid = self::getCurrentTokenVar('uid');
 
 		return $uid;
+	}
+
+	// 用户和CMS管理员都可以访问的权限
+	public static function needPrimaryScope()
+	{
+		$scope = self::getCurrentTokenVar('scope');
+
+		if($scope){
+
+			if($scope >= ScopeEnum::User){
+				return true;
+			}else{
+				throw new ForbiddenException();
+			}
+		}else{
+			throw new TokenException();
+		}
+	}
+
+	// 只有用户才能访问的接口权限
+	public static function needExclusiveScope()
+	{
+		$scope = self::getCurrentTokenVar('scope');
+
+		if($scope){
+
+			if($scope == ScopeEnum::User){
+				return true;
+			}else{
+				throw new ForbiddenException();
+			}
+		}else{
+			throw new TokenException();
+		}
 	}
 }
