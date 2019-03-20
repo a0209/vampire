@@ -6,6 +6,21 @@ use app\lib\exception\ParameterException;
 
 class OrderPlace extends BaseValidate
 {
+	protected $oProducts = [
+		[
+			'product_id' => 1,
+			'count' => 3
+		],
+		[
+			'product_id' => 1,
+			'count' => 3
+		],
+		[
+			'product_id' => 1,
+			'count' => 3
+		],
+	];
+
 	protected $rule = [
 		'products' => 'checkProducts'
 	];
