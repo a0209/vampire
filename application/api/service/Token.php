@@ -10,6 +10,7 @@ use app\lib\exception\ForbiddenException;
 
 class Token
 {
+	// 生成Token
 	public function generateToken()
 	{
 		// 32个字符组成一组随机字符串

@@ -52,3 +52,6 @@ Route::post('api/:version/address', 'api/:version.Address/createOrUpdateAddress'
 //订单
 Route::post('api/:version/order', 'api/:vesion.Order/placeOrder');
 
+//支付-预订单
+Route::post('api/:version/pay/pre_order', 'api/:version.Pay/getPreOrder');
+

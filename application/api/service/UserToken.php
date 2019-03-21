@@ -23,6 +23,7 @@ class UserToken extends Token
 		$this->wxLoginUrl = sprintf(config('wx.login_url'),$this->wxAppID,$this->wxAppSecret,$this->code);
 	}
 
+	//获取Token令牌
 	public function get()
 	{
 		$result = curl_get($this->wxLoginUrl);
@@ -34,8 +35,10 @@ class UserToken extends Token
 			$loginFail = array_key_exists('errcode', $wxResult);
 
 			if($loginFail){
+				// 登录失败
 				$this->processLoginError($wxResult);
 			}else{
+				// 登录成功
 				return $this->grantToken($wxResult);
 			}
 		}
@@ -64,6 +67,7 @@ class UserToken extends Token
 		return $token;
 	}
 
+	// 生成缓存数据
 	private function saveToCache($cachedValue)
 	{
 		$key = self::generateToken();
@@ -81,10 +85,12 @@ class UserToken extends Token
 		return $key;
 	}
 
+	// 准备缓存数据
 	private function prepareCachedValue($wxResult,$uid)
 	{
 		$cachedValue = $wxResult;
 		$cachedValue['uid'] = $uid;
+		// 权限
 		// scope = 16 代表App用户的权限数值
 		$cachedValue['scope'] = ScopeEnum::User;
 		// scope = 32 代表CMS(管理员)用户的权限数值
