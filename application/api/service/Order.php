@@ -136,7 +136,7 @@ class Order
 		return $userAddress->toArray();
 	}
 
-	// 外界调用查询库存量
+	// 外界调用查询库存量状态
 	public function checkOrderStock($orderID)
 	{
 		$oProducts = OrderProduct::where('order_id','=',$orderID)->select();

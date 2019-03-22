@@ -7,6 +7,7 @@ use think\Request;
 use app\lib\exception\TokenException;
 use app\lib\enum\ScopeEnum;
 use app\lib\exception\ForbiddenException;
+use think\Exception;
 
 class Token
 {
@@ -85,5 +86,22 @@ class Token
 		}else{
 			throw new TokenException();
 		}
+	}
+
+	// 检测用户是否匹配
+	public static function isValidOperate($checkedUID)
+	{
+		if (!$checkedUID)
+		{
+			throw new Exception('检查UID时必须传入一个被检查的UID');
+		}
+		$currentOperateUID = self::getCurrentUid();
+
+		if ($currentOperateUID == $checkedUID)
+		{
+			return true;
+		}
+
+		return false;
 	}
 }
