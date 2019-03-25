@@ -9,6 +9,10 @@ use app\lib\exception\TokenException;
 use app\api\service\Token;
 use app\lib\enum\OrderStatusEnum;
 use think\Exception;
+use think\Loader;
+
+// extend/WxPay/WxPay.Api.php
+Loader::import('WxPay.WxPay',EXTEND_PATH,'.Api.php');
 
 class Pay
 {
@@ -26,11 +30,8 @@ class Pay
 
 	public function pay()
 	{
-		// 订单号可能根本不存在
-		// 订单号确实是存在的, 但是, 订单号和当前用户是不匹配的
-		// 订单有可能已经被支付过
-		// 进行库存量检测
 		$this->checkOrderValid();
+		// 进行库存量检测
 		$orderService = new OrderService();
 		$status = $orderService->checkOrderStock($this->orderID);
 
@@ -42,10 +43,19 @@ class Pay
 	// 微信预订单
 	private function makeWxPreOrder()
 	{
-		
+		// openid
+		$openid = Token::getCurrentTokenVar('openid');
+
+		if(!$openid){
+			throw new TokenException();
+		}
+		$wxOrderData = new \WxPayUnifiedOrder();
 	}
 
 	// 检测前三个
+	// 订单号可能根本不存在
+	// 订单号确实是存在的, 但是, 订单号和当前用户是不匹配的
+	// 订单有可能已经被支付过
 	private function checkOrderValid()
 	{
 		$order = OrderModel::where('id', '=', $this->orderID)->find();

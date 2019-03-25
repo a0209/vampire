@@ -44,15 +44,15 @@ class UserToken extends Token
 		}
 	}
 
+	// 拿到openID
+	// 数据库里看一下,这个openID是否已经存在
+	// 如果存在,则不处理,如果不存在那么新增一条user记录
+	// 生成令牌,准备缓存数据,写入缓存
+	// 把令牌返回到客户端去
+	// key:令牌
+	// value:wxResult,uid,scope
 	private function grantToken($wxResult)
 	{
-		// 拿到openID
-		// 数据库里看一下,这个openID是否已经存在
-		// 如果存在,则不处理,如果不存在那么新增一条user记录
-		// 生成令牌,准备缓存数据,写入缓存
-		// 把令牌返回到客户端去
-		// key:令牌
-		// value:wxResult,uid,scope
 		$openid = $wxResult['openid'];
 		$user = UserModel::getByOpenId($openid);
 
