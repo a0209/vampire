@@ -20,7 +20,7 @@ class Pay extends BaseController
 
 		return $pay->pay();
 	}
-
+	
 	// 接受微信返回的支付结果(通知)
 	public function receviceNotify()
 	{

@@ -80,7 +80,7 @@ class Order
 				'create_time' => $create_time
 			];
 		}
-		catch (Exception $ex)
+		catch (\Exception $ex)
 		{
 			Db::rollback();
 			throw $ex;

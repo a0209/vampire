@@ -55,3 +55,6 @@ Route::post('api/:version/order', 'api/:vesion.Order/placeOrder');
 //支付-预订单
 Route::post('api/:version/pay/pre_order', 'api/:version.Pay/getPreOrder');
 
+//接受微信通知结果
+Route::post('api/:version/pay/notify', 'api/:version.Pay/receiveNotify');
+
