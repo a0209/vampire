@@ -59,7 +59,7 @@ class Pay
 		$wxOrderData->SetTotal_fee($totalPrice * 100);	// 支付总金额(单位:分),所以要乘以100
 		$wxOrderData->SetBody('零食商贩');				// 商品的一个简要描述
 		$wxOrderData->SetOpenid($openid);				
-		$wxOrderData->SetNotify_url('');				// 接收微信支付结果的接口(地址)
+		$wxOrderData->SetNotify_url(config('secure.pay_back_url'));		// 接收微信支付结果的接口(地址)
 		return $this->getPaySignature($wxOrderData);
 	}
 
