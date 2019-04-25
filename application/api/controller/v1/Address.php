@@ -7,10 +7,6 @@ use app\api\service\Token as TokenService;
 use app\api\model\User as UserModel;
 use app\lib\exception\UserException;
 use app\lib\exception\SuccessMessage;
-use think\Controller;
-use app\lib\enum\ScopeEnum;
-use app\lib\exception\ForbiddenException;
-use app\lib\exception\TokenException;
 use app\api\controller\BaseController;
 
 class Address extends BaseController

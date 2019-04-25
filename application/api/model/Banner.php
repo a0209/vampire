@@ -2,10 +2,6 @@
 
 namespace app\api\model;
 
-use think\Db;
-use think\Exception;
-use think\Model;
-
 class Banner extends BaseModel
 {
 	protected $hidden = ['update_time','delete_time'];

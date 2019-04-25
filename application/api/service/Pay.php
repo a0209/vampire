@@ -6,7 +6,6 @@ use app\api\model\Order as OrderModel;
 use app\api\service\Order as OrderService;
 use app\lib\exception\OrderException;
 use app\lib\exception\TokenException;
-use app\api\service\Token;
 use app\lib\enum\OrderStatusEnum;
 use think\Exception;
 use think\Loader;
