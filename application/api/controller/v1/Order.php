@@ -3,9 +3,13 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\BaseController;
+use app\api\validate\IDMustBePostiveInt;
 use app\api\validate\OrderPlace;
+use app\api\validate\PagingParamter;
 use app\api\service\Token as TokenService;
 use app\api\service\Order as OrderService;
+use app\api\model\Order as OrderModel;
+use app\lib\exception\OrderException;
 
 class Order extends BaseController{
 	// 用户在选择商品后,向api提交包含它所选择商品的相关信息
@@ -20,7 +24,8 @@ class Order extends BaseController{
 	// 成功:进行库存量的扣除
 
 	protected $beforeActionList = [
-		'checkExclusiveScope' => ['only' => 'placeOrder']
+		'checkExclusiveScope' => ['only' => 'placeOrder'],
+		'checkPrimaryScope' => ['only' => 'getSummaryByUser, getDetail'],
 	];
 
 	// 下单
@@ -34,5 +39,54 @@ class Order extends BaseController{
 		$status = $order->place($uid, $products);
 
 		return $status;
+	}
+
+	/**
+	 * @param int $page
+	 * @param int $size
+	 * 获取历史订单
+	 * @return array
+	 * @throws \app\lib\exception\ParameterException
+	 */
+	public function getSummaryByUser($page=1, $size=15)
+	{
+		(new PagingParamter())->goCheck();
+		$uid = TokenService::getCurrentUid();
+		$pagingOrders = OrderModel::getSummaryByUser($uid, $page, $size);
+
+		if($pagingOrders->isEmpty()){
+
+			return [
+				'data' => [],
+				'current_page' => $pagingOrders->getCurrentPage()
+			];
+		}
+		$data = $pagingOrders->hidden(['snap_items','snap_address','prepay_id'])
+			->toArray();
+
+		 return [
+		 	'data' => $data,
+		 	'current_page' => $pagingOrders->getCurrentPage()
+		 ];
+	}
+
+	/**
+	 * @param $id
+	 * 订单想情
+	 * @return OrderModel
+	 * @throws OrderException
+	 * @throws \app\lib\exception\ParameterException
+	 * @throws \think\exception\DbException
+	 */
+	public function getDetail($id)
+	{
+		(new IDMustBePostiveInt())->goCheck();
+		$orderDetail = OrderModel::get($id);
+
+		if(!$orderDetail){
+			throw new OrderException();
+		}
+
+		return $orderDetail->hidden(['prepay_id']);
 	}
 }
