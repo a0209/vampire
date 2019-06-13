@@ -7,6 +7,7 @@ use app\api\service\Order as OrderService;
 use app\lib\exception\OrderException;
 use app\lib\exception\TokenException;
 use app\lib\enum\OrderStatusEnum;
+use constant\config;
 use think\Exception;
 use think\Loader;
 use think\Log;

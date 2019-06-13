@@ -46,11 +46,17 @@ Route::get('api/:version/category/all', 'api/:version.Category/getAllCategories'
 //获取token令牌
 Route::post('api/:version/token/user', 'api/:version.Token/getToken');
 
-//地址
+//校验令牌
+Route::post('api/:version/token/verify', 'api/:version.Token/verifyToken');
+
+// 新增或更新地址
 Route::post('api/:version/address', 'api/:version.Address/createOrUpdateAddress');
 
+// 获取地址
+Route::get('api/:version/address', 'api/:version.Address/getUserAddress');
+
 //订单
-Route::post('api/:version/order', 'api/:vesion.Order/placeOrder');
+Route::post('api/:version/order', 'api/:version.Order/placeOrder');
 
 //获取订单详情
 Route::get('api/:version/order/:id', 'api/:version.Order/getDetail', [], ['id'=>'\d+']);

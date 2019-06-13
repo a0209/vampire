@@ -11,9 +11,10 @@ abstract class WxPayConfigInterface
 	 * 微信公众号信息配置
 	 * 
 	 * APPID：绑定支付的APPID（必须配置，开户邮件中可查看）
-	 * 
+	 const APPID = 'wx99da6db81a980880';
+
 	 * MCHID：商户号（必须配置，开户邮件中可查看）
-	 * 
+	 const MCHID = 'your mech id';
 	 */
 	public abstract function GetAppId();
 	public abstract function GetMerchantId();

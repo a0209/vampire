@@ -72,7 +72,7 @@ class Order extends BaseController{
 
 	/**
 	 * @param $id
-	 * 订单想情
+	 * 订单详情
 	 * @return OrderModel
 	 * @throws OrderException
 	 * @throws \app\lib\exception\ParameterException

@@ -6,6 +6,7 @@ use app\api\model\Product;
 use app\lib\exception\OrderException;
 use app\api\model\UserAddress;
 use app\lib\exception\UserException;
+use app\api\model\Order as OrderModel;
 use app\api\model\OrderProduct;
 use think\Db;
 
@@ -50,7 +51,7 @@ class Order
 		try
 		{
 			$orderNo = $this->makeOrderNo();
-			$order = new \app\api\model\Order();
+			$order = new OrderModel();
 			$order->user_id = $this->uid;
 			$order->order_no = $orderNo;
 			$order->total_price = $snap['orderPrice'];
@@ -118,6 +119,8 @@ class Order
 		if(count($this->products) > 1){
 			$snap['snapName'] .= '等';
 		}
+
+		return $snap;
 	}
 
 	// 获取用户地址

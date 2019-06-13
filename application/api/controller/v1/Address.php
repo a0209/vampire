@@ -2,6 +2,7 @@
 
 namespace app\api\controller\v1;
 
+use app\api\model\UserAddress;
 use app\api\validate\AddressNew;
 use app\api\service\Token as TokenService;
 use app\api\model\User as UserModel;
@@ -12,9 +13,27 @@ use app\api\controller\BaseController;
 class Address extends BaseController
 {
 	protected $beforeActionList = [
-		'checkPrimaryScope' => ['only' => 'createOrUpdateAddress']
+		'checkPrimaryScope' => ['only' => 'createOrUpdateAddress,getUserAddress']
 	];
-	
+
+	// 获取用户地址
+	public function getUserAddress()
+	{
+		$uid = TokenService::getCurrentUid();
+		$userAddress = UserAddress::where('user_id', $uid)
+			->find();
+
+		if(!$userAddress){
+			throw new UserException([
+				'msg' => '用户地址不存在',
+				'errorCode' => 60001
+			]);
+		}
+
+		return $userAddress;
+	}
+
+	// 新增或更新地址
 	public function createOrUpdateAddress()
 	{
 		$validate = new AddressNew();

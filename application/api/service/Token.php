@@ -15,7 +15,7 @@ class Token
 	public function generateToken()
 	{
 		// 32个字符组成一组随机字符串
-		$randChars = getRandChar();
+		$randChars = getRandChar(32);
 		// 用三组字符串,进行md5加密
 		$timestamp = $_SERVER['REQUEST_TIME_FLOAT'];
 		//salt 盐
@@ -103,5 +103,16 @@ class Token
 		}
 
 		return false;
+	}
+
+	public static function verifyToken($token)
+	{
+		$exist = Cache::get($token);
+
+		if($exist){
+			return true;
+		}else{
+			return false;
+		}
 	}
 }

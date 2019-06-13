@@ -4,7 +4,7 @@ namespace app\api\service;
 
 use app\lib\exception\WeChatException;
 use think\Exception;
-use app\api\model\User as USerModel;
+use app\api\model\User as UserModel;
 use app\lib\exception\TokenException;
 use app\lib\enum\ScopeEnum;
 
