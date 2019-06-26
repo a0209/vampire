@@ -10,6 +10,7 @@ use app\api\service\Token as TokenService;
 use app\api\service\Order as OrderService;
 use app\api\model\Order as OrderModel;
 use app\lib\exception\OrderException;
+use app\lib\exception\SuccessMessage;
 
 class Order extends BaseController{
 	// 用户在选择商品后,向api提交包含它所选择商品的相关信息
@@ -88,5 +89,49 @@ class Order extends BaseController{
 		}
 
 		return $orderDetail->hidden(['prepay_id']);
+	}
+
+	/**
+	 * 获取全部订单简要信息(分页)-cms
+	 * @param int $page
+	 * @param int $size
+	 * @return array
+	 * @throws \app\lib\exception\ParameterException
+	 */
+	public function getSummary($page, $size = 10)
+	{
+		(new PagingParamter())->goCheck();
+
+		$pagingOrders = OrderModel::getSummaryByPage($page, $size);
+
+		if($pagingOrders->isEmpty()){
+			return [
+				'current_page' => $pagingOrders->currentPage(),
+				'data' => []
+			];
+		}
+		$data = $pagingOrders->hidden(['snap_items', 'snap_address'])
+			->toArray();
+
+		return [
+			'current_page' => $pagingOrders->currentPage(),
+			'data' => $data
+		];
+	}
+
+	/**
+	 * 发送模板消息
+	 * @param int $id - 订单号Id
+	 */
+	public function delivery($id)
+	{
+		(new IDMustBePostiveInt())->goCheck();
+
+		$order = new OrderService();
+		$success = $order->delivery($id);
+
+		if($success){
+			return new SuccessMessage();
+		}
 	}
 }

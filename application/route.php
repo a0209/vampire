@@ -46,6 +46,9 @@ Route::get('api/:version/category/all', 'api/:version.Category/getAllCategories'
 //获取token令牌
 Route::post('api/:version/token/user', 'api/:version.Token/getToken');
 
+//获取第三方应用令牌
+Route::post('api/:version/token/app', 'api/:version.Token/getAppToken');
+
 //校验令牌
 Route::post('api/:version/token/verify', 'api/:version.Token/verifyToken');
 
@@ -63,6 +66,12 @@ Route::get('api/:version/order/:id', 'api/:version.Order/getDetail', [], ['id'=>
 
 //获取历史订单
 Route::get('api/:version/order/by_user', 'api/:version.Order/getSummaryByUser');
+
+//获取全部订单
+Route::get('api/:version/order/paginate', 'api/:version.Order/getSummary');
+
+//向微信发送模板消息
+Route::put('api/:version/order/delivery', 'api/:version.Order/delivery');
 
 //支付-预订单
 Route::post('api/:version/pay/pre_order', 'api/:version.Pay/getPreOrder');
