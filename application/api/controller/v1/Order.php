@@ -24,6 +24,24 @@ class Order extends BaseController{
 	// 成功:也需要进行库存量的检测
 	// 成功:进行库存量的扣除
 
+	// 另一种思路处理库存量的问题
+	// 先库存量检测
+	// 创建订单
+	// 减库存 -- 预扣除库存
+	// if pay 真正的减库存
+	// 在一定时间内(15min)没有支付这个订单, 我们需要还原库存
+
+	// 还原的方法
+	// 在PHP里写一个定时器, 每隔1min去遍历数据库,
+	// 找到那些超时的订单, 把这些订单给还原库存
+	// linux crontab
+
+	// 任务队列
+	// 订单任务加入到队列里
+	// redis
+
+	// 定时器, 每隔1s, 5s, 访问API的接口
+
 	protected $beforeActionList = [
 		'checkExclusiveScope' => ['only' => 'placeOrder'],
 		'checkPrimaryScope' => ['only' => 'getSummaryByUser, getDetail'],
