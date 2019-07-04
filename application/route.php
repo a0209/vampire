@@ -46,5 +46,36 @@ Route::get('api/:version/category/all', 'api/:version.Category/getAllCategories'
 //获取token令牌
 Route::post('api/:version/token/user', 'api/:version.Token/getToken');
 
-//地址
+//获取第三方应用令牌
+Route::post('api/:version/token/app', 'api/:version.Token/getAppToken');
+
+//校验令牌
+Route::post('api/:version/token/verify', 'api/:version.Token/verifyToken');
+
+// 新增或更新地址
 Route::post('api/:version/address', 'api/:version.Address/createOrUpdateAddress');
+
+// 获取地址
+Route::get('api/:version/address', 'api/:version.Address/getUserAddress');
+
+//订单
+Route::post('api/:version/order', 'api/:version.Order/placeOrder');
+
+//获取订单详情
+Route::get('api/:version/order/:id', 'api/:version.Order/getDetail', [], ['id'=>'\d+']);
+
+//获取历史订单
+Route::get('api/:version/order/by_user', 'api/:version.Order/getSummaryByUser');
+
+//获取全部订单
+Route::get('api/:version/order/paginate', 'api/:version.Order/getSummary');
+
+//向微信发送模板消息
+Route::put('api/:version/order/delivery', 'api/:version.Order/delivery');
+
+//支付-预订单
+Route::post('api/:version/pay/pre_order', 'api/:version.Pay/getPreOrder');
+
+//接受微信通知结果
+Route::post('api/:version/pay/notify', 'api/:version.Pay/receiveNotify');
+

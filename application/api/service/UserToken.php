@@ -4,8 +4,9 @@ namespace app\api\service;
 
 use app\lib\exception\WeChatException;
 use think\Exception;
-use app\api\model\User as USerModel;
+use app\api\model\User as UserModel;
 use app\lib\exception\TokenException;
+use app\lib\enum\ScopeEnum;
 
 class UserToken extends Token
 {
@@ -22,10 +23,12 @@ class UserToken extends Token
 		$this->wxLoginUrl = sprintf(config('wx.login_url'),$this->wxAppID,$this->wxAppSecret,$this->code);
 	}
 
+	//获取Token令牌
 	public function get()
 	{
 		$result = curl_get($this->wxLoginUrl);
-		$wxResult = json_decode($result, true);
+		$wxResult = json_decode($result, true);  
+		// 返回的数据: session_key, expire_in(超时时间), openid
 
 		if(empty($wxResult)){
 			throw new Exception('获取session_key及openID时异常,微信内部错误');
@@ -33,22 +36,24 @@ class UserToken extends Token
 			$loginFail = array_key_exists('errcode', $wxResult);
 
 			if($loginFail){
+				// 登录失败
 				$this->processLoginError($wxResult);
 			}else{
+				// 登录成功
 				return $this->grantToken($wxResult);
 			}
 		}
 	}
 
+	// 拿到openID
+	// 数据库里看一下,这个openID是否已经存在
+	// 如果存在,则不处理,如果不存在那么新增一条user记录
+	// 生成令牌,准备缓存数据,写入缓存
+	// 把令牌返回到客户端去
+	// key:令牌
+	// value:wxResult,uid,scope
 	private function grantToken($wxResult)
 	{
-		// 拿到openID
-		// 数据库里看一下,这个openID是否已经存在
-		// 如果存在,则不处理,如果不存在那么新增一条user记录
-		// 生成令牌,准备缓存数据,写入缓存
-		// 把令牌返回到客户端去
-		// key:令牌
-		// value:wxResult,uid,scope
 		$openid = $wxResult['openid'];
 		$user = UserModel::getByOpenId($openid);
 
@@ -63,6 +68,7 @@ class UserToken extends Token
 		return $token;
 	}
 
+	// 生成缓存数据
 	private function saveToCache($cachedValue)
 	{
 		$key = self::generateToken();
@@ -80,11 +86,15 @@ class UserToken extends Token
 		return $key;
 	}
 
+	// 准备缓存数据
 	private function prepareCachedValue($wxResult,$uid)
 	{
 		$cachedValue = $wxResult;
 		$cachedValue['uid'] = $uid;
-		$cachedValue['scope'] = 16;
+		// 权限
+		// scope = 16 代表App用户的权限数值
+		$cachedValue['scope'] = ScopeEnum::User;
+		// scope = 32 代表CMS(管理员)用户的权限数值
 
 		return $cachedValue;
 	}

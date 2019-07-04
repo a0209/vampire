@@ -4,7 +4,6 @@ namespace app\api\controller\v1;
 use app\api\validate\IDMustBePostiveInt;
 use app\api\model\Banner as BannerModel;
 use app\lib\exception\BannerMissException;
-use think\Exception;
 
 class Banner
 {
